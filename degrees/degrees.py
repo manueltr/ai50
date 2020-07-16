@@ -91,10 +91,36 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
-    raise NotImplementedError
+    start = Node(source,None,None)
+    q = QueueFrontier()
+    explored = set()
+
+    q.add(start)
+
+    while not q.empty():
+
+        # remove node from Queue and check if target
+        node = q.remove()
+        if node.state == target:
+            return create_path(node)
+        
+        explored.add(node.state)
+
+
+        for movie in people[node.state]['movies']:
+            for star in movies[movie]['stars']:
+
+                temp_node = Node(star,node,movie)
+                if temp_node.state == target:
+                    return create_path(temp_node)
+                if temp_node.state not in explored:
+                    q.add(temp_node)
+    
+    return None
                 
 
 def create_path(current):
+    """Returns the path taken to reach solution."""
     solution = []
     while current.parent:
         solution.insert(0,(current.action, current.state))
